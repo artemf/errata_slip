@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Artem Fedorov"]
   spec.email         = ["artemf@mail.ru"]
   spec.summary       = %q{Apply corrections from yaml file to array of records}
-  spec.description   = %q{Apply corrections from yaml file to array of records. Useful in scraping when one needs to apply errata to scraped data.}
+  spec.description   = %q{Apply corrections from yaml file to array of records. Useful in scraping/parsing when one needs to apply errata to the scraped data.}
   spec.homepage      = ""
   spec.license       = "MIT"
 

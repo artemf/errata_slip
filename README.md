@@ -118,7 +118,7 @@ scraped_records.map { |record| errata.correct_item!(record) }
 
 #### Works with both symbolic and string hash keys
 
-While errata file if written with string hash keys, correction works on both string-keyed hashed and symbol-keyed hashes.
+While errata file is written with string hash keys, correction works on both string-keyed hashed and symbol-keyed hashes.
 
 So it doesn't matter if you have 
 
