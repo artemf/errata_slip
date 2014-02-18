@@ -9,13 +9,15 @@ Apply corrections from yaml file to array of records. Useful in scraping/parsing
 ```YAML
 - city:  "LasVegas"
   ~city:   "Las Vegas"
+- city:  "LosAngeles"
+  ~city:   "Los Angeles"
 ```
 
 **apply_errata.rb:**
 
 ```ruby
 records = [ { city: 'LasVegas', population: '596424' },
-            { city: 'Los Angeles', population: '3857799' } ]
+            { city: 'LosAngeles', population: '3857799' } ]
 ErrataSlip::load_file('errata.yaml').correct!(records)
 p records
 => [ { city: 'Las Vegas', population: '596424' },
