@@ -2,37 +2,31 @@
 
 Apply corrections from yaml file to array of records. Useful in scraping/parsing when one needs to apply errata to the scraped data.
 
-#### Use case 1 - Apply easy fixes to scraped data
+#### Use case 1 - Easily apply fixes to scraped data
 
-**errata.yaml**
+**errata.yaml:**
 
 ```YAML
----
 - city:  "LasVegas"
   ~city:   "Las Vegas"
 ```
 
-**apply_errata.rb**
+**apply_errata.rb:**
 
 ```ruby
-records = [
-             { city: 'LasVegas', population: '596424' },
-             { city: 'Los Angeles', population: '3857799' }
-          ]
+records = [ { city: 'LasVegas', population: '596424' },
+            { city: 'Los Angeles', population: '3857799' } ]
 ErrataSlip::load_file('errata.yaml').correct!(records)
 p records
-=> [
-      { city: 'Las Vegas', population: '596424' },
-      { city: 'Los Angeles', population: '3857799' }
-   ]
+=> [ { city: 'Las Vegas', population: '596424' },
+     { city: 'Los Angeles', population: '3857799' } ]
 ```
 
 #### Use case 2 - Add additional metadata to your data
 
-**errata.yaml**
+**errata.yaml:**
 
 ```YAML
----
 - city:    "Los Angeles"
   country: "USA"
   ~state:    "California"
@@ -41,19 +35,15 @@ p records
   ~state:    "Nevada"
 ```
 
-**apply_errata.rb**
+**apply_errata.rb:**
 
 ```ruby
-records = [
-             { city: 'Las Vegas',   country: 'USA' },
-             { city: 'Los Angeles', country: 'USA' }
-          ]
+records = [ { city: 'Las Vegas',   country: 'USA' },
+            { city: 'Los Angeles', country: 'USA' } ]
 ErrataSlip::load_file('errata.yaml').correct!(records)
 p records
-=> [
-      { city: 'Las Vegas',   country: 'USA', state: 'Nevada' },
-      { city: 'Los Angeles', country: 'USA', state: 'California' }
-   ]
+=> [ { city: 'Las Vegas',   country: 'USA', state: 'Nevada' },
+     { city: 'Los Angeles', country: 'USA', state: 'California' } ]
 ```
 
 ## Installation
@@ -86,7 +76,6 @@ to find the record to correct, 'correct' fields are used to apply changes to the
 are prefixed with tilde (~):
 
 ```YAML
----
 - fieldname:  "Value of fieldname to find"
   ~fieldname:   "Value of fieldname to replace"
 ```
@@ -94,7 +83,6 @@ are prefixed with tilde (~):
 For example, if your records have key 'name', errata file might look like this: 
 
 ```YAML
----
 - name:  "Name to find"
   ~name:   "Name to replace with"
 ```
@@ -102,7 +90,6 @@ For example, if your records have key 'name', errata file might look like this:
 'Correct' fields can introduce new fields to your records:
 
 ```YAML
----
 - name:  "Name to find"
   ~name:            "Name to replace with"
   ~applied_errata:  true
@@ -115,6 +102,16 @@ You use correct! method to correct all records in-place
 ```ruby
 scraped_records = [ { :name => 'Adam'}, { :name => 'Eve' } ]
 ErrataSlip::load_file('errata.yaml').correct!(scraped_records)
+```
+
+#### Applying errata to single record
+
+You use correct_item! method to correct one hash in-place
+
+```ruby
+scraped_records = [ { :name => 'Adam'}, { :name => 'Eve' } ]
+errata = ErrataSlip::load_file('errata.yaml')
+scraped_records.map { |record| errata.correct_item!(record) }
 ```
 
 #### Works with both symbolic and string hash keys
@@ -143,7 +140,6 @@ In this example we change all names from 'Adaam' to 'Adam'
 
 errata.yaml
 ```YAML
----
 - name:  "Adaam"
   ~name:   "Adam"
 ```
@@ -169,7 +165,6 @@ respectively.
 
 errata.yaml
 ```YAML
----
 - name:    "Hillary"
   surname: "Clinton"
   ~name:     "Monika"
@@ -196,7 +191,6 @@ This example searches all records with name 'Adam' and changes surname to 'Smith
 
 errata.yaml
 ```YAML
----
 - name:    "Adam"
   ~surname:  "Smith"
   ~book:     "The Wealth of Nations"
@@ -220,7 +214,6 @@ The syntax is the same.
 
 errata.yaml
 ```YAML
----
 - name:    "Adam"
   surname: "Smith"
   ~book:     "The Wealth of Nations"
@@ -239,8 +232,6 @@ p records
       { name: 'Adam', surname: 'Sandler', book: 'Go the F**k to Sleep' }
    ]
 ```
-
-
 
 ## Contributing
 
