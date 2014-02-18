@@ -1,6 +1,60 @@
 # ErrataSlip
 
-Apply corrections from yaml file to array of records. Useful in scraping when one needs to apply errata to scraped data.
+Apply corrections from yaml file to array of records. Useful in scraping/parsing when one needs to apply errata to the scraped data.
+
+#### Use case 1 - Apply easy fixes to scraped data
+
+**errata.yaml**
+
+```YAML
+---
+- city:  "LasVegas"
+  ~city:   "Las Vegas"
+```
+
+**apply_errata.rb**
+
+```ruby
+records = [
+             { city: 'LasVegas', population: '596424' },
+             { city: 'Los Angeles', population: '3857799' }
+          ]
+ErrataSlip::load_file('errata.yaml').correct!(records)
+p records
+=> [
+      { city: 'Las Vegas', population: '596424' },
+      { city: 'Los Angeles', population: '3857799' }
+   ]
+```
+
+#### Use case 2 - Add additional metadata to your data
+
+**errata.yaml**
+
+```YAML
+---
+- city:    "Los Angeles"
+  country: "USA"
+  ~state:    "California"
+- city:    "Los Angeles"
+  country: "USA"
+  ~state:    "Nevada"
+```
+
+**apply_errata.rb**
+
+```ruby
+records = [
+             { city: 'Las Vegas',   country: 'USA' },
+             { city: 'Los Angeles', country: 'USA' }
+          ]
+ErrataSlip::load_file('errata.yaml').correct!(records)
+p records
+=> [
+      { city: 'Las Vegas',   country: 'USA', state: 'Nevada' },
+      { city: 'Los Angeles', country: 'USA', state: 'California' }
+   ]
+```
 
 ## Installation
 
@@ -18,11 +72,72 @@ Or install it yourself as:
 
 ## Usage
 
-You are expected to have array of hashes and apply corrections to it.
+You are expected to have array of hashes as an input and corrections are applied to it.
 
-### Single field match & change
+#### Errata file
 
-You can easily fix missplelings or inaccuracies in scraped data or other input.
+You create ErrataSlip from yaml file with errata
+```ruby
+e = ErrataSlip::load_file('errata.yaml')
+```
+
+Errata file is array of hashes, which has 'match' fields and 'correct' fields. 'Match' fields are used
+to find the record to correct, 'correct' fields are used to apply changes to the record. 'Correct' fields
+are prefixed with tilde (~):
+
+```YAML
+---
+- fieldname:  "Value of fieldname to find"
+  ~fieldname:   "Value of fieldname to replace"
+```
+
+For example, if your records have key 'name', errata file might look like this: 
+
+```YAML
+---
+- name:  "Name to find"
+  ~name:   "Name to replace with"
+```
+
+'Correct' fields can introduce new fields to your records:
+
+```YAML
+---
+- name:  "Name to find"
+  ~name:            "Name to replace with"
+  ~applied_errata:  true
+```
+
+#### Applying errata to all records
+
+You use correct! method to correct all records in-place
+
+```ruby
+scraped_records = [ { :name => 'Adam'}, { :name => 'Eve' } ]
+ErrataSlip::load_file('errata.yaml').correct!(scraped_records)
+```
+
+#### Works with both symbolic and string hash keys
+
+While errata file if written with string hash keys, correction works on both string-keyed hashed and symbol-keyed hashes.
+
+So it doesn't matter if you have 
+
+```ruby
+scraped_records = [ { :name => 'Adam'}, { :name => 'Eve' } ]
+```
+
+or
+
+```ruby
+scraped_records = [ { 'name' => 'Adam'}, { 'name' => 'Eve' } ]
+```
+
+ErrataSlip will autodetect format and apply errata correctly.
+
+## Examples
+
+#### Easily fix missplelings or inaccuracies in scraped data
 
 In this example we change all names from 'Adaam' to 'Adam'
 
@@ -47,9 +162,7 @@ p records
    ]
 ```
 
-### Multiple fields match & change
-
-You can match several fields and correct several fields.
+#### You can match several fields and correct several fields at the same time
 
 We search for all records with name 'Hillary' and surname 'Clinton' and change them to 'Monika' and 'Lewinsky'
 respectively.
@@ -77,9 +190,7 @@ p records
    ]
 ```
 
-### Multiple fields match & change
-
-'Match' fields and 'correct' fields shouldn't be the same.
+#### 'Match' fields and 'correct' fields shouldn't be the same
 
 This example searches all records with name 'Adam' and changes surname to 'Smith' and book to 'The Wealth of Nations'.
 
@@ -103,9 +214,9 @@ p records
    ]
 ```
 
-### Multiple fields match & adding new fields
+#### We can not only change existing fields, but also add new ones
 
-We can not only change existing fields, but also add new ones. The syntax is the same.
+The syntax is the same.
 
 errata.yaml
 ```YAML
