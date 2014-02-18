@@ -1,5 +1,5 @@
 # encoding: UTF-8
 
+require 'rspec'
 
-class SpecHelper
-end
+require 'errata_slip'

@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ErrataSlip::VERSION
   spec.authors       = ["Artem Fedorov"]
   spec.email         = ["artemf@mail.ru"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Apply corrections from yaml file to array of records}
+  spec.description   = %q{Apply corrections from yaml file to array of records. Useful in scraping when one needs to apply errata to scraped data.}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -19,5 +19,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.5"
+  spec.add_development_dependency "rspec"
   spec.add_development_dependency "rake"
 end

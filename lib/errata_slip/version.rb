@@ -1,3 +1,3 @@
-module ErrataSlip
-  VERSION = "0.0.1"
+class ErrataSlip
+  VERSION = "1.0.0"
 end
