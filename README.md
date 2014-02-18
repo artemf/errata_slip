@@ -235,6 +235,10 @@ p records
    ]
 ```
 
+## Versioning
+
+ErrataSlip sticks to [Semantic Versioning](http://semver.org)
+
 ## Compatibility
 
 ErrataSlip is tested against MRI 1.9.3, 2.0.0 and 2.1.0
