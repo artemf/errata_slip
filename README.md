@@ -1,4 +1,4 @@
-# ErrataSlip
+# ErrataSlip [![Build Status](https://travis-ci.org/artemf/errata_slip.png?branch=master)](https://travis-ci.org/artemf/errata_slip)
 
 Apply corrections from yaml file to array of records. Useful in scraping/parsing when one needs to apply errata to the scraped data.
 
