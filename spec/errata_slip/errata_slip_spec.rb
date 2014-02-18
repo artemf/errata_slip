@@ -66,6 +66,16 @@ describe ErrataSlip do
       end
     end
 
+    it 'should return the modified item too' do
+      errata = [ { 'name' => 'Adam', '~name' => 'Brian' } ]
+      item = { 'name' => 'Adam' }
+      expected = { 'name' => 'Brian' }
+      result = ErrataSlip.new(errata).correct_item!(item)
+      result.should eq expected
+      item.should eq expected
+      result.should eq item
+    end
+
   end
 
   context '.correct!' do
