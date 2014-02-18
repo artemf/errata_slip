@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["artemf@mail.ru"]
   spec.summary       = %q{Apply corrections from yaml file to array of records}
   spec.description   = %q{Apply corrections from yaml file to array of records. Useful in scraping/parsing when one needs to apply errata to the scraped data.}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/artemf/errata_slip"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
